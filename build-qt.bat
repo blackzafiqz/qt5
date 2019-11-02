@@ -1,0 +1,2 @@
+cd build
+..\configure.bat -release -confirm-license -opensource -platform win32-clang-msvc -openssl-linked -ssl -prefix C:\Qt\Static\5.13.1-clang-msvc-shared -IC:\OpenSSL\VS\openssl1.1.1e-dev\include -LC:\OpenSSL\VS\openssl1.1.1e-dev\lib
