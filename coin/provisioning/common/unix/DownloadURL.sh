@@ -89,7 +89,14 @@ DownloadURL () {
     url=$1
     url2=$2
     expectedHash=$3
-    targetFile=$4
+    # Optional argument $4: destination filename
+    if [ x"$4" = x ]
+    then
+        # defaults to the last component of $url
+        targetFile=$(echo $url | sed 's|^.*/||')
+    else
+        targetFile=$4
+    fi
 
     if VerifyHash "$targetFile" "$expectedHash"
     then
@@ -99,9 +106,9 @@ DownloadURL () {
         if  ! Download "$url" "$targetFile"
         then
             echo "FAIL! to download, trying alternative URL:  $url2"  1>&2
-            if  ! Download "$url" "$targetFile"
+            if  ! Download "$url2" "$targetFile"
             then
-                echo 'FAIL! to download even from alternative url'  1>&2
+                echo 'FAIL! to download even from alternative URL'  1>&2
                 return 1
             fi
         fi

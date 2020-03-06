@@ -46,12 +46,15 @@ for service in apt-daily.timer apt-daily-upgrade.timer apt-daily.service apt-dai
 done
 
 function set_internal_repo {
+
+    # Stop fetching the dep-11 metadata, since our mirrors do not handle them well
+    sudo mv /etc/apt/apt.conf.d/50appstream{,.disabled}
+
     sudo tee "/etc/apt/sources.list" > /dev/null <<-EOC
-    deb [arch=amd64] http://repo-clones.ci.qt.io/apt-mirror/mirror/ubuntu.trumpetti.atm.tut.fi/ubuntu/ bionic main restricted universe multiverse
-    deb [arch=amd64] http://repo-clones.ci.qt.io/apt-mirror/mirror/ubuntu.trumpetti.atm.tut.fi/ubuntu/ bionic main restricted universe multiverse
-    deb [arch=amd64] http://repo-clones.ci.qt.io/apt-mirror/mirror/ubuntu.trumpetti.atm.tut.fi/ubuntu/ bionic-updates main restricted universe multiverse
-    deb [arch=amd64] http://repo-clones.ci.qt.io/apt-mirror/mirror/ubuntu.trumpetti.atm.tut.fi/ubuntu/ bionic-backports main restricted universe
-    deb [arch=amd64] http://repo-clones.ci.qt.io/apt-mirror/mirror/ubuntu.trumpetti.atm.tut.fi/ubuntu/ bionic-security main restricted universe multiverse
+    deb [arch=amd64] http://repo-clones.ci.qt.io/apt-mirror/mirror/ubuntu/ bionic main restricted universe multiverse
+    deb [arch=amd64] http://repo-clones.ci.qt.io/apt-mirror/mirror/ubuntu/ bionic-updates main restricted universe multiverse
+    deb [arch=amd64] http://repo-clones.ci.qt.io/apt-mirror/mirror/ubuntu/ bionic-backports main restricted universe
+    deb [arch=amd64] http://repo-clones.ci.qt.io/apt-mirror/mirror/ubuntu/ bionic-security main restricted universe multiverse
 EOC
 }
 
@@ -166,6 +169,14 @@ installPackages+=(git-lfs)
 installPackages+=(chrpath)
 installPackages+=(gawk)
 installPackages+=(texinfo)
+# Needed for Poppler test in QtWebEngine
+installPackages+=(libpoppler-cpp-dev)
+# Needed for QtCore
+installPackages+=(libdouble-conversion-dev)
+installPackages+=(libpcre2-dev)
+# Needed for qtgampepad
+installPackages+=(libsdl2-2.0)
+installPackages+=(libsdl2-dev)
 
 echo "Running update for apt"
 waitLoop
